@@ -31,6 +31,8 @@ def core_timer():
     log.warning('Start Hedge, ' + str(run_count))
     # 查询unidax持仓
     posi_unidax = hed.get_unidax_position(log)
+    # 查询huobi持仓
+    posi_huobi = get_huobi_position()
     # 定时循环
     global timer
     timer = threading.Timer(15, core_timer)
