@@ -10,7 +10,7 @@
 UniDAX + Huobi
 '''
 
-import hedgeAction as hed
+import hedge_action_position as hed
 from UniDax import UniDaxServices as uds, Constant as cons
 import threading
 import logging
@@ -18,21 +18,25 @@ import datetime
 import json
 from pprint import pprint
 
-# 参与报价币种
-coin_list = ['usdt','eth','etc','ltc','btc']
-
 # 用于记录基准仓位
-base_position = {}
+base_position = []
+
 
 # 定期调用做市程序
 def core_timer():
     # log
     global run_count
     log.warning('Start Hedge, ' + str(run_count))
+
     # 查询unidax持仓
     posi_unidax = hed.get_unidax_position(log)
+
     # 查询huobi持仓
-    posi_huobi = get_huobi_position()
+    posi_huobi = hed.get_huobi_position(log)
+
+    # uni+huobi总仓位，与起始仓位进行对比
+    hed.do_hedge(posi_unidax, posi_huobi, base_position, log)
+
     # 定时循环
     global timer
     timer = threading.Timer(15, core_timer)
@@ -78,7 +82,8 @@ try:
         line = l
         line = line.rstrip('\n') # 默认读取末尾会有换行符，这儿给删掉
         sa = line.split(',')
-        base_position[sa[0]] = float(sa[1])
+        dict = {'coin': sa[0], 'base_vol': sa[1]}
+        base_position.append(dict)
 finally:
      f.close()
 
