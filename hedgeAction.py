@@ -24,3 +24,9 @@ def get_unidax_position(log):
             re_posi[coin] = vol
     return re_posi
 
+# 获取huobi仓位
+def get_huobi_position(log):
+    posi = hbs.get_balance()
+    return
+
+
