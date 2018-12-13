@@ -57,20 +57,23 @@ def do_hedge(p_u, p_h, b_p, log):
         # 相关交易数据
         hedge_vol = 0.0
         hedge_direct = ''
+
+        # 额外多头仓位，需要做空
         if total > base_vol:
-            # 做空
             hedge_vol = total - base_vol
             hedge_direct = 'SELL'
 
+        # 做多
         if total < base_vol:
-            # 做多
             hedge_vol = base_vol- total
             hedge_direct = 'BUY'
+
 
         # 如果对冲数量大于0，则执行对冲交易
         if hedge_vol > 0:
             do_trade_huobi(coin, hedge_vol, hedge_direct, log)
     return
+
 
 # 在火币下单, 因为对冲，所以直接下市价单
 def do_trade_huobi(coin, he_v, he_d,log):

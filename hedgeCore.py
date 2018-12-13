@@ -39,7 +39,7 @@ def core_timer():
 
     # 定时循环
     global timer
-    timer = threading.Timer(15, core_timer)
+    timer = threading.Timer(10, core_timer)
     timer.start()
     # log
     log.warning('End Hedge, ' + str(run_count))
